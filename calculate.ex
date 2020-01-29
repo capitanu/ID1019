@@ -6,7 +6,7 @@ defmodule Calc do
 
 
   def lookup(var, [{:bind, var, value} | _] ) do {:int, value} end
-  def lookup(var, [_ | rest]) do lookup(var,rest) end
+  def lookup(var, [ _ | rest]) do lookup(var,rest) end
 
   def eval({:var,name}, bindings) do lookup(name,bindings) end
   def eval({:add, x, y}, bindings) do eval({:add, eval(x, bindings), eval(y, bindings)}) end
