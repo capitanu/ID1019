@@ -98,7 +98,8 @@ defmodule Proc do
   def start2() do
     receive do
       {:task,task,user} ->
-	done = doit(task)
+	done = task
 	send(user,done)
+    end
   end
 end
