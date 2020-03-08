@@ -47,32 +47,36 @@ defmodule OWT do
   @spec check(city(),city(),map(),map()) :: {:found, dist(),map()}
 
   def check(from,to,umap,map) do
-    case Map.get(map,to,:nil) do
+    temp = Map.get(umap,from, :nil)
+    case temp do
       :nil -> shortest(from,to,umap,map)
-      distance -> select(Map.get(map,to), to, umap, map)
+      distance -> {:found,temp,umap}
+	#select(temp, to, umap, map)
     end
   end
 
   @spec shortest(city(),city(),map(),map()) :: {:found,dist(),map()}
 
-  def shortest(from,to,updated,map) do
-    updated = Map.put(updated,from,:inf)
-    neighbours = Map.get(map, from)
-    {:found, dist, updated} = select(neighbours, to, updated,map)
-    {:found, dist, updated}
+  def shortest(from,to,umap,map) do
+    umap = Map.put(umap,to,:inf)
+    neighbours = Map.get(map, to)
+    {:found, dist, umap} = select(neighbours, to, umap,map)
+    IO.puts("DIST: #{dist}, FROM: #{from}, TO: #{to}")
+    #...
+    {:found, dist, umap}
   end
 
   @spec select([{:city,city(),integer()}], city(),map(),map()) :: {:found,dist(),map()}
 
-  def select([], _, updated,map) do {:found, :inf, map} end
-  def select([{:city,next,d1} | rest], to, updated, map) do
-    {:found, d2, map}= check(next,to,updated,map)
+  def select([], _, umap,map) do {:found, :inf, map} end
+  def select([{:city,next,d1} | rest], to, umap, map) do
+    {:found, d2, umap}= check(next,to,Map.put(umap,next, d1),map)
     dist = add(d1,d2)
-    {found, sele, _} = select(rest,to,updated,map)
+    {found, sele, _} = select(rest,to,umap,map)
     if sele < dist do
-      {:found, sele, updated}
+      {:found, sele, umap}
     else
-      {:found,dist,updated}
+      {:found,dist,umap}
     end
   end
 
@@ -84,3 +88,4 @@ defmodule OWT do
 end
 
 #map = Map.new([{:a, [{:city, :b, 5},{:city,:c,3}]}, {:b, [{:city, :a,5},{:city,:c,1},{:city,:d,2}]},{:c,[{:city,:a,3},{:city,:b,1}]},{:d,[{:city,:b,2}]}])
+#map = Map.new([{:a, [{:city,:b,1}]}, {:b, [{:city, :a, 1}, {:city, :c, 2}]}, {:c, [{:city,:b,2}]}])
