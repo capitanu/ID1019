@@ -1,0 +1,121 @@
+#+Exam 13/03/2018
+
+* 1) Lambda Calculus
+** 9
+** 11
+** 10
+* 2) Operation semantics
+** ? / E{}(y = :b, y = :a, y) -> ?
+** E{}(:b) -> b    Ps'(y,b) -> theta    E{y/b}(y = :a, y) -> ON PAPER
+* 3) Pattern Matching
+** a) {x/1, y/2, z/3}
+** b) {x/1, y/[2,3], z/[]}
+** c) {x/1, y/2, z/3}
+** d) fail
+** e) {x/1, y/2, z/[3,4]}
+* 4) Recursion
+** a) tree sum
+#+BEGIN_SRC elixir
+  defmodule Exam3 do
+    def sum(:nil) do 0 end
+    def sum({:node, val, left, right }) do
+      val + sum(left) + sum(right)
+    end
+  end
+#+END_SRC
+
+
+
+** reverse tail
+#+BEGIN_SRC elixir
+  def reverse([]) do [] end
+  def tailreverse([elem | []] , t) do [elem | t] end
+  def tailreverse([elem | list], t) do
+      tailreverse(list, [elem | t])
+  end
+  def reverse(n) do
+    tailreverse(n, [])
+  end
+
+  def append([],list2) do list2 end
+  def tailappend([], list2) do list2 end
+  def tailappend([elem | rest], list2) do
+    tailappend(rest, [elem | list2]) end
+  def append(list1, list2) do
+      list1 = reverse(list1)
+      tailappend(list1, list2)
+  end
+#+END_SRC
+* 5) Time Complexity
+** mirror a tree O(2^n)
+** a queue O(2)
+* 6) Process description
+** TRB
+#+BEGIN_SRC elixir
+  defmodule TRB do
+    def start() do
+      spawn(fn() -> closed() end)
+    end
+    def two() do
+      receive do
+	2 -> two()
+	4 -> four()
+	x -> closed()
+      end
+    end
+
+    def four() do
+      receive do
+	2 -> two()
+	6 -> six()
+	x -> closed()
+      end
+    end
+
+    def six() do
+      receive do
+	2 -> two()
+	x -> closed()
+      end
+    end
+    def closed() do
+      receive do
+	2 -> two()
+	x -> closed()
+      end
+    end  
+  end
+#+END_SRC
+** tic tac toe
+[:tic, :toe, :tac]
+** parallel sum
+#+BEGIN_SRC elixir
+  defmodule Sum do
+    def sum(tree) do
+      self = self()
+      spawn(fn() -> sum(self, tree) end)
+      receive do
+	x -> x
+      end
+    end
+    def sum(x, {:node, left, right}) do
+      self = self()
+      lefttree = spawn(fn() -> sum(self,left) end)
+      righttree = spawn(fn() -> sum(self,right) end)
+      sum1 = receive do x -> x end
+      sum2 = receive do x ->  x end
+      send(x, sum1+sum2)
+      sum1+sum2
+    end
+    def sum(from,{:leaf, value}) do
+      send(from, value)
+    end
+  
+  
+  end
+#+END_SRC
+* 7) Programming
+** a heap
+#+BEGIN_SRC elixir
+
+#+END_SRC
