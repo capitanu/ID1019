@@ -39,7 +39,7 @@ defmodule OWT do
   @spec shortest(city(),city(),map()) :: dist()
 
   def shortest(from,to,map) do
-    umap = Map.new([{to, 0}])
+    umap = Map.new([{from, 0}])
     dist = check(from, to, umap ,map)
     dist
   end
@@ -47,11 +47,13 @@ defmodule OWT do
   @spec check(city(),city(),map(),map()) :: {:found, dist(),map()}
 
   def check(from,to,umap,map) do
-    temp = Map.get(umap,from, :nil)
+    :timer.sleep(800)
+    temp = Map.get(umap,to, :nil)
     case temp do
       :nil -> shortest(from,to,umap,map)
+      :inf -> shortest(from,to,umap,map)
       distance -> {:found,temp,umap}
-	#select(temp, to, umap, map)
+      #select(temp, to, umap, map)
     end
   end
 
@@ -59,24 +61,29 @@ defmodule OWT do
 
   def shortest(from,to,umap,map) do
     umap = Map.put(umap,to,:inf)
-    neighbours = Map.get(map, to)
-    {:found, dist, umap} = select(neighbours, to, umap,map)
-    IO.puts("DIST: #{dist}, FROM: #{from}, TO: #{to}")
-    #...
+    neighbours = Map.get(map, from)
+    {:found, dist, umap} = select(neighbours, [to,from], umap,map)
+    umap = Map.put(umap, to, dist)
     {:found, dist, umap}
   end
 
   @spec select([{:city,city(),integer()}], city(),map(),map()) :: {:found,dist(),map()}
 
   def select([], _, umap,map) do {:found, :inf, map} end
-  def select([{:city,next,d1} | rest], to, umap, map) do
-    {:found, d2, umap}= check(next,to,Map.put(umap,next, d1),map)
-    dist = add(d1,d2)
-    {found, sele, _} = select(rest,to,umap,map)
-    if sele < dist do
-      {:found, sele, umap}
+  def select([{:city, next, d1}], [next, _], umap, map ) do
+    {:found, d1 ,umap} end
+  def select([{:city,next,d1} | rest], [to , from], umap, map) do
+    if Map.get(umap,from) == d1  do
+      select(rest, [to,from], umap, map)
     else
-      {:found,dist,umap}
+      {:found, d2, umap}= check(next,to,Map.put(umap, next, d1),map)
+      dist = add(d1,d2)
+      {found, sele, _} = select(rest,[to, from],umap,map)
+      if sele < dist do
+	{:found, sele, umap}
+      else
+	{:found,dist,umap}
+      end
     end
   end
 
