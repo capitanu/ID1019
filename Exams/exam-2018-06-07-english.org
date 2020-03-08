@@ -15,6 +15,7 @@ E{}(:b) -> b S({}, y) -> {} P{}(y,b) ETC YOU CAN DO IT
 ** d){x/1,y/2,z/[3,4]}
 ** e){x/1,y/2,z/[3,4]}
 * 4) Recursion
+** fizzbuzz
 #+BEGIN_SRC elixir
   def fizzbuzz(n) do
     fizzbuzz(1,n+1,1,1) 
@@ -35,4 +36,68 @@ E{}(:b) -> b S({}, y) -> {} P{}(y,b) ETC YOU CAN DO IT
     nreverse(rest,[elem|list])
   end
 #+END_SRC
-* 5)
+** fairly balanced
+#+BEGIN_SRC elixir
+  def fairly(:nil) do :nil end
+  def fairly({:node,:nil,:nil}) do {:ok,1} end
+  def fairly({:node,:nil,right}) do
+    {x,y} = fairly(right)
+    if y >= 2 do :no else
+    {:ok, 1+y} end
+  end
+  def fairly({:node,left,:nil}) do
+    {x,y} = fairly(left)
+    if y >= 2 do :no else
+    {:ok, 1+y} end
+  end
+  
+  def fairly({:node, left, right}) do
+    {msg, x} = fairly(left)
+    {msg1, y} = fairly(right)
+    if msg == :no or msg1 == :no do :no
+    else if abs(x-y) > 1 do :no
+    else {:ok,1 + max(x,y)} end end
+  end
+#+END_SRC
+* 5) Time complexity
+** sorting a list
+Time complexity: O(N^2)
+** a graph
+Time complexity: O(E*V) where E = number of edges and V = number of vertices.
+
+WRONG: O(k^n) where k = number of branching factor and n = number of vertices. wtf?
+
+* 6) Process description
+** A knife, a fork...
+#+BEGIN_SRC elixir
+  def dillinger() do
+    spawn(fn() -> nyc() end)
+  end
+  def nyc() do
+    IO.puts("Hey Jim!")
+    receive do
+      :knife -> knife()
+    end
+  end
+
+  def knife() do
+    receive do
+      :fork -> fork()
+    end
+  end
+  
+  def fork() do
+    receive do
+      :bottle -> bottle()
+    end
+  end
+  def bottle() do
+    receive do
+      :cork -> nyc()
+    end
+  end
+#+END_SRC
+** tic-tac-toe
+[:tac,:toe,:tic]
+** parallel foldp
+

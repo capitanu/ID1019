@@ -16,5 +16,53 @@ defmodule Exam4 do
   def nreverse([],list) do list end
   def nreverse([elem | rest], list) do
     nreverse(rest,[elem|list])
-  end    
+  end
+
+  def fairly(:nil) do :nil end
+  def fairly({:node,:nil,:nil}) do {:ok,1} end
+  def fairly({:node,:nil,right}) do
+    {x,y} = fairly(right)
+    if y >= 2 do :no else
+    {:ok, 1+y} end
+  end
+  def fairly({:node,left,:nil}) do
+    {x,y} = fairly(left)
+    if y >= 2 do :no else
+    {:ok, 1+y} end
+  end
+  
+  def fairly({:node, left, right}) do
+    {msg, x} = fairly(left)
+    {msg1, y} = fairly(right)
+    if msg == :no or msg1 == :no do :no
+    else if abs(x-y) > 1 do :no
+    else {:ok,1 + max(x,y)} end end
+  end
+
+  def dillinger() do
+    spawn(fn() -> nyc() end)
+  end
+  def nyc() do
+    IO.puts("Hey Jim!")
+    receive do
+      :knife -> knife()
+    end
+  end
+
+  def knife() do
+    receive do
+      :fork -> fork()
+    end
+  end
+  
+  def fork() do
+    receive do
+      :bottle -> bottle()
+    end
+  end
+  def bottle() do
+    receive do
+      :cork -> nyc()
+    end
+  end
 end
