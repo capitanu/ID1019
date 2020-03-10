@@ -12,10 +12,19 @@ defmodule Exam4 do
     fizzbuzz(elem+1,n-1,three+1,1,[:buzz  | list]) end
   def fizzbuzz(elem, n, three, five, list) do
     fizzbuzz(elem+1,n-1,three+1,five+1, [elem | list]) end
+
+  
   def reverse(list) do nreverse(list,[]) end
   def nreverse([],list) do list end
   def nreverse([elem | rest], list) do
     nreverse(rest,[elem|list])
+  end
+  def nappend([], list) do list end
+  def nappend([elem| rest], list2) do
+    nappend(rest, [elem | list2])
+  end
+  def append(list1, list2) do
+    nappend(reverse(list1), list2)
   end
 
   def fairly(:nil) do :nil end
@@ -23,12 +32,12 @@ defmodule Exam4 do
   def fairly({:node,:nil,right}) do
     {x,y} = fairly(right)
     if y >= 2 do :no else
-    {:ok, 1+y} end
+      {:ok, 1+y} end
   end
   def fairly({:node,left,:nil}) do
     {x,y} = fairly(left)
     if y >= 2 do :no else
-    {:ok, 1+y} end
+      {:ok, 1+y} end
   end
   
   def fairly({:node, left, right}) do
@@ -65,4 +74,10 @@ defmodule Exam4 do
       :cork -> nyc()
     end
   end
+
+  def calc() do 3 end
+  def test() do
+    spawn(calc())
+  end
+    
 end

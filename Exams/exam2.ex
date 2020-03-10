@@ -7,8 +7,7 @@ defmodule Fib do
   end
 
 
-
-  
+  TEST
   def take(fun,n) do
     {:ok, w, fun} = take(fun, n, [])
     {:ok, reverse(w), fun}
@@ -25,6 +24,8 @@ defmodule Fib do
   def reverse([elem | rest]) do
     reverse(rest) ++ [elem]
   end
+
+  
   
   
   def test() do
