@@ -35,9 +35,13 @@ Grading code 1234
 Which of the following is a function of the network layer in the Internet model?
 
 A. Congestion control
+
 B. Routing
+
 C. Flow control
+
 D. Medium access control
+
 ** 2.
 
 Consider a transfer of a message over a 10 km long link. The signal’s propagation speed
@@ -46,17 +50,24 @@ is 1500 byte. How long does it take from that the sender starts sending the mess
 until the receiver has received the entire message?
 
 A. 30 μs 
+
 B. 50 μs
+
 C. 60 μs
+
 D. 80 μs
 
 ** 3.
 Which organization develops Internet protocol standards?
 
 A. Internet Engineering Task Force (IETF)
+
 B. Institute of Electrical and Electronics Engineers (IEEE)
+
 C. Internet Corporation for Assigned Names and Numbers (ICANN)
+
 D. International Organization for Standardization (ISO)
+
 
 ** 4.
 A client requests a web page from an HTTP server. The page consists of nine parts:
@@ -65,8 +76,11 @@ its first request to the server, how many HTTP responses will the client receive
 from the server?
 
 A. One
+
 B. Nine
+
 C. Ten
+
 D. Eighteen
 
 ** 5.
