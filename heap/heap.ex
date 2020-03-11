@@ -1,5 +1,0 @@
-defmodule Heap do
-  def new() do [] end
-
-  def add([], int) do [{:heap, int, nil, nil}]
-end
