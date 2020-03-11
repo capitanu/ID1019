@@ -1,0 +1,776 @@
+\input{../include/preamble}
+
+\title[ID1019 Higher order]{Higher order}
+
+
+\author{Johan Montelius}
+\institute{KTH}
+\date{\semester}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}[fragile]{let's play some cards}
+
+\begin{columns}
+
+ \begin{column}{0.2\linewidth}
+   \includegraphics[width=\linewidth]{kung.png}
+ \end{column}
+ 
+ \pause
+
+ \begin{column}{0.8\linewidth}
+  Properties of a card:
+  \begin{itemize}
+   \item ${\rm Suit} \in \{{\rm spade}, {\rm heart}, {\rm diamond}, {\rm club}\}$
+   \pause
+   \item ${\rm Value} \in \{2,3,\ldots 14\}$
+   \pause 
+   \item ${\rm Card} \in  \{\langle {\rm s}, {\rm v} \rangle | \quad {\rm s} \in {\rm Suit} \wedge {\rm v} \in {\rm Value} \}$
+  \end{itemize}
+
+  \vspace{10pt}  \pause
+  In Elixir:
+  \begin{verbatim}
+  @type suite :: :spade | :heart | :diamond | :club
+  @type value :: 2..14
+  @type card :: {:card, suite, value}
+  \end{verbatim}
+
+ \end{column}
+\end{columns}
+
+\end{frame}
+
+\begin{frame}[fragile]{order of cards}
+
+\pause
+\begin{verbatim}
+def lt({:card, s, v1}, {:card, s, v2})  do  v1 < v2 end
+\end{verbatim}
+\pause
+\begin{verbatim}
+def lt({:card, :club, _}, _) do  true end
+\end{verbatim}
+\pause
+\begin{verbatim}
+def lt({:card, :diamond, _}, {:card, :heart, _}) do true
+\end{verbatim}
+\pause
+\begin{verbatim}
+def lt({:card, :diamond, _}, {:card, :spade, _}) do true
+\end{verbatim}
+\pause
+\begin{verbatim}
+def lt({:card, :heart, _}, {:card, :spade, _}) do   true
+\end{verbatim}
+\pause
+\begin{verbatim}
+def lt({:card, _, _}, {:card, _, _}) do  false
+\end{verbatim}
+
+\end{frame}
+
+\begin{frame}[fragile]{sorting cards}
+
+\begin{columns}
+
+ \begin{column}{0.4\linewidth}
+\begin{verbatim}
+@spec sort([card]) :: [card]
+\end{verbatim}
+\begin{verbatim}
+def sort([]) do [] end
+def sort([c]) do [c] end
+\end{verbatim}
+\pause
+\begin{verbatim}
+def sort(deck) do
+  {d1, d2} = split(deck)
+  s1 = sort(d1)
+  s2 = sort(d2)
+  merge(s1, s2)
+end
+\end{verbatim}
+ \end{column}
+ 
+ \pause
+
+ \begin{column}{0.5\linewidth}
+\begin{verbatim}
+@spec split([card]) :: {[card],[card]}
+\end{verbatim}
+\pause
+\begin{verbatim}
+def split([]) do {[], []} end
+\end{verbatim}
+\begin{verbatim}
+def split([c|rest]) do 
+  {s1, s2} = split(rest)
+  { ..., ...}
+end
+\end{verbatim}
+ \end{column}
+\end{columns}
+
+\end{frame}
+
+\begin{frame}[fragile]{tail recursive split}
+
+\begin{columns}
+
+ \begin{column}{0.4\linewidth}
+\begin{verbatim}
+def split([]) do 
+  {[], []} 
+end
+\end{verbatim}
+\pause
+\begin{verbatim}
+def split([c|rest]) do 
+  {s1, s2} = split(rest)
+  { ..., ...}
+end
+\end{verbatim}
+ \end{column}
+ 
+ \pause
+
+ \begin{column}{0.6\linewidth}
+\begin{verbatim}
+def split(deck) do split(deck, [], []) end 
+\end{verbatim}
+\pause
+\begin{verbatim}
+@spec split([card], [card], [card]) :: 
+   {[card],[card]}
+\end{verbatim}   
+\pause   
+
+\begin{verbatim}
+def split([], d1, d2) do  {d1, d2} end
+\end{verbatim}
+\pause
+\begin{verbatim}
+def split([c|rest], d1, d2) do
+   split(rest, ..., ...)
+end
+\end{verbatim}
+ \end{column}
+\end{columns}
+
+\end{frame}
+
+\begin{frame}[fragile]{sorting cards}
+
+\begin{verbatim}
+@spec merge([card], [card]) :: [card]
+\end{verbatim}
+\pause
+\begin{verbatim}
+def merge([], s2) do ... end
+def merge(s1, []) do ... end
+\end{verbatim}
+\pause
+\begin{verbatim}
+def merge([c1|r1]=s1, [c2|r2]=s2) do
+  case lt(c1, c2) do
+    true ->
+      [c1| merge(r1, s2)]
+    false ->
+      [c2| merge(s1, r2)]     
+  end
+end
+\end{verbatim}
+
+\end{frame}
+
+\begin{frame}{what to do}
+
+\vspace{10pt}\pause Implement function that sorts names of people.
+
+\vspace{10pt}\pause Implement function that sorts a frequency table.
+
+\vspace{10pt}\pause Implement function that sorts ....
+
+\end{frame}
+
+\begin{frame}[fragile]{old friends}
+
+Have we seen this before?
+
+\pause\vspace{20pt}
+\begin{columns}
+   \begin{column}{.5\linewidth}
+     \begin{block}{sum/1}
+       \begin{verbatim}
+def sum([]) do  0 end
+def sum([h|t]) do
+    add(h,sum(t))
+end
+       \end{verbatim}
+       \vfill
+     \end{block}
+   \end{column} 
+\pause
+   \begin{column}{.5\linewidth}
+     \begin{block}{prod/1}
+       \begin{verbatim}
+def prod([]) do 1 end
+def prod([h|t]) do
+   mul(h,prod(t))
+end
+       \end{verbatim}
+       \vfill
+     \end{block}
+   \end{column}
+  \end{columns}
+
+\vspace{20pt}{\em There is no built-in add/2, nor mul/2, but we can pretend that there is.}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{good to have}
+
+We would like to to this:
+
+\pause\vspace{20pt}
+
+\begin{columns}
+   \begin{column}{.5\linewidth}
+     \begin{block}{foldr/3}
+       \begin{verbatim}
+def foldr([], acc, op) do acc end
+       \end{verbatim}
+\pause
+       \begin{verbatim}
+def foldr([h|t], acc, op) do
+   op.(h, foldr(t, acc, op))
+end
+      \end{verbatim}
+       \vfill
+     \end{block}
+   \end{column}
+\pause
+   \begin{column}{.5\linewidth}
+     \begin{block}{sum/1}
+       \begin{verbatim}
+def sum(l) do
+  add = ... 
+  foldr(l, ..., add)
+end
+       \end{verbatim}
+     \end{block}
+\pause     
+   \begin{block}{prod/1}
+       \begin{verbatim}
+def prod(l) do
+  mul = ... 
+  foldr(l, ..., mul)
+end
+       \end{verbatim}
+     \end{block}
+   \end{column}
+  \end{columns}
+
+\pause\vspace{20pt}
+{\em only problem, \ldots How do we express the function?}
+
+\end{frame}
+
+\begin{frame}[fragile]{lambda expressions}
+
+We introduce a new data structure: a closure
+
+  \vspace{20pt}
+
+  \begin{tabular}{r l l}
+   {\em Atoms} & = & \{a, b, c, \ldots\} \\
+   {\em Closures} & = & \{<p:s:$\theta$> | p $\in $ Parameters $\wedge$ s $\in $ Sequences $\wedge$  $\theta \in $ Environments \}\\
+   {\em Structures} & = & {\em Closures} $\cup$ {\em Atoms} $\cup$ \{ \{a, b\} \textbar a $\in$ {\em Structures}  $\wedge$  b $\in$ {\em Structures} \}
+  \end{tabular}
+
+\pause\vspace{10pt}
+A {\em closure} is a function and an environment.
+
+\pause\vspace{10pt}
+We have not really defined what {\em Parameters}, a {\em Sequences} nor {\em Environments} are, but let's forget this for a while.
+
+\end{frame}
+
+\begin{frame}[fragile]{syntax for function expressions}
+
+\begin{code}
+   <function> &::= 'fn' '(' <parameters> ')' '->' <sequence> 'end'\\
+   <parameters> &::= '  ' | <variables> \\
+   <variables> &::= <variable> |  <variable> ',' <variables>\\
+\end{code}
+\pause
+\begin{code}
+   <application> &::= <expression> '.(' <arguments> ')'\\
+   <arguments> &::= '  ' | <expressions> \\
+   <expressions> &::= <expression> |  <expression> ',' <expressions>\\
+\end{code}
+\pause
+\begin{code}
+   <expression> &::= <function> | <application> | ...\\
+\end{code}
+
+\end{frame}
+
+\begin{frame}[fragile]{function expressions}
+
+\pause\vspace{10pt}
+We will write:
+
+\pause\vspace{10pt}\hspace{60pt}\verb!x = 2; f = fn (y) -> x + y end; f.(4) !
+
+
+\vspace{20pt}\pause
+Remember this?
+
+\pause\vspace{10pt}\hspace{60pt} $ \lambda y \rightarrow x + y $
+
+\end{frame}
+
+
+\begin{frame}[fragile]{evaluation of a function expression}
+
+$$\frac{ \theta = \{ v/s \mid  v/s \in \sigma \wedge v {\rm\ free\  in\ sequence}\}}{
+E\sigma(\texttt{fn (} {\rm parameters}\;  \texttt{) ->}\; {\rm sequence}\; \texttt{end} ) \rightarrow \quad \langle{\rm parameters}:{\rm sequence}:\theta\rangle}$$
+
+\vspace{20pt}\pause
+\begin{verbatim}
+   x = 2; f = fn (y) -> x + y end; f.(4)
+\end{verbatim}
+
+\vspace{20pt}\hspace{40pt}What is {\tt f}?
+
+\end{frame}
+
+
+\begin{frame}[fragile]{evaluation of a function application}
+
+$$\frac{E\sigma(f) \rightarrow <v_1, \ldots:{\rm seq}:\theta > \qquad E\sigma(e_i) \rightarrow s_i \qquad E\{v_1/s_1, \ldots\}\cup\theta({\rm seq}) \rightarrow s}{
+E\sigma(f.(e_1, \ldots)) \rightarrow s}$$ 
+
+\vspace{20pt}\pause
+\begin{verbatim}
+   x = 2; f = fn (y) -> x + y end; f.(4)
+\end{verbatim}
+
+\vspace{20pt}\hspace{40pt}What is {\tt f.(4)}?
+
+\end{frame}
+ 
+\begin{frame}[fragile]{example}
+
+\begin{verbatim}
+def foo(x) do
+  y = 3
+  fn (v) -> v + y  + x 
+end
+\end{verbatim}
+\pause\vspace{20pt}
+
+\begin{verbatim}
+   f = foo(2); x = 5;  y = 7; f.(1)
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{case closed}
+
+\pause
+     \begin{block}{sum/1}
+       \begin{verbatim}
+def sum(l) do
+  add = fn (x,y) -> x + y end
+  foldr(l, 0, add)
+end
+       \end{verbatim}
+     \end{block}
+   \pause
+     \begin{block}{prod/1}
+       \begin{verbatim}
+def prod(l) do
+  mul = fun(x,a) -> x * a end
+  foldr(l, 1, mul)
+end
+       \end{verbatim}
+\vfill
+     \end{block}
+
+\end{frame}
+
+\begin{frame}[fragile]{example}
+
+\pause What is gurka/1 doing?
+
+\pause\vspace{20pt}
+
+\begin{verbatim}
+def gurka(l) do
+  f = fn (_, a) -> a + 1 end
+  foldr(l, 0, f)
+end
+\end{verbatim}
+
+\pause\vspace{20pt}
+\pause How about tomat/1?
+
+\pause\vspace{10pt}
+\begin{verbatim}
+def tomat(l) do 
+  f = fn (h, a) ->  a ++ [h] end
+  foldr(l, [], f)
+end
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{example}
+     \begin{block}{foldr/3}
+       \begin{verbatim}
+def foldr([], acc, op) do acc end
+def foldr([h|t], acc, op) ->
+   op.(h, foldr(t, acc, op))
+end
+       \end{verbatim}
+     \end{block}
+\pause
+     \begin{block}{foldl/3}
+       \begin{verbatim}
+def foldl([], acc, op) do acc end
+def foldl([h|t], acc, op) do
+  foldl(t, op.(h, acc), op)
+end
+       \end{verbatim}
+     \end{block}
+\end{frame}
+
+
+\begin{frame}[fragile]{example}
+
+\pause\vspace{10pt}
+\begin{verbatim}
+def gurka(l) do
+  f = fn (_, a) -> a + 1 end
+  foldl(l, 0, f)
+end
+\end{verbatim}
+\pause 
+\begin{verbatim}
+def morot(l) do
+  f = fn (h, a) ->  [h|a] end
+  foldl(l, [], f)
+end
+\end{verbatim}
+\end{frame}
+
+\begin{frame}{left or right}
+
+Which one should you use, {\em fold-left} or {\em fold-right}?
+
+\end{frame}
+
+\begin{frame}[fragile]{append all}
+
+\pause Append all lists in a lists.
+
+\vspace{20pt}
+
+\begin{verbatim}
+def append_right(l) do
+  f = fun(e,a) -> e ++ a end
+  foldr(l, [], f)
+end
+\end{verbatim}
+\pause
+\begin{verbatim}
+def append_left(l) ->
+  f = fn (e,a) -> a ++ e end
+  foldl(l, [], f)
+end
+\end{verbatim}
+
+\end{frame}
+
+
+
+\begin{frame}{patterns}
+
+In the {\tt List} module. 
+
+\begin{itemize}
+\item {\tt foldr(list, acc, f)}: fold from right  {\tt f.(x1, .. f.(xn, acc)..) }
+\item {\tt foldl(list, acc, f)}: fold from left  {\tt f.(xn, .. f.(x1, acc)..) }
+\end{itemize}
+
+\vspace{10pt}\pause
+In the {\tt Enum} module. 
+\begin{itemize}
+\item {\tt map(enum, f)}: return the list of {\tt f.(x)} for each element {\tt x} in the enumeration
+\pause 
+\item {\tt filter(enum, f)}: return a list of all elements {\tt x}, for which {\tt f.(x)} evaluates to true
+\pause
+\item {\tt split_with(enum, f)}: partition the enumeration based on the result of  {\tt f.(x)}
+\pause
+\item {\tt sort(enum, f)}: sort the list given that the function {\t f} is less than or equal
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{an infinite list}
+
+\pause\vspace{20pt}
+
+\verb+inf = infinity()+\pause \verb+; [0|inf] = inf.()+\pause \verb+; [1|inf] = inf.()+
+
+\pause
+\begin{verbatim}
+def infinity() do 
+  fn() -> infinity(0) end 
+end
+\end{verbatim}
+\pause
+\begin{verbatim}
+def infinity(n) -> 
+  [...|...] 
+end
+\end{verbatim}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{the list of fibonacci }
+
+A function that returns an infinite list of Fibonacci numbers.
+
+\pause\vspace{20pt}
+
+\begin{verbatim}
+def fib() do 
+  fn() -> fib(1,1) end 
+end
+\end{verbatim}
+\pause
+\begin{verbatim}
+def fib(f1, f2) do
+  [f1 | fn() -> fib(f2, f1+f2) end]
+end
+\end{verbatim}
+
+\end{frame}
+
+\begin{frame}{a lazy list from 1 to 10}
+
+  Let's represent a {\em range} of integers from 1 to 10 as:
+
+  \vspace{10pt}\hspace{20pt} {\tt \{:range, 1, 10\}}
+
+  \vspace{10pt}\pause
+
+  Elixir gives us a syntax for this:
+
+    \vspace{10pt}\hspace{20pt} {\tt 1..10}
+  
+
+    
+  \vspace{40pt}\pause
+  {\em This is not exactly how Elixir represents it but it's fine for now}
+
+\end{frame}
+
+
+
+\begin{frame}[fragile]{let's reduce this range}
+
+\begin{verbatim}
+  def sum(r) do
+    reduce(r,  0, fn(x,a) -> x+a end)
+  end
+\end{verbatim}
+
+  \vspace{10pt}\pause{\em Our {\tt reduce/3} should work as {\tt foldl/3} (does it make sense to have a {\tt foldr/3}).}
+
+  
+\begin{verbatim}
+  def reduce({:range, from , to}, acc, fun) do
+    if from <= to do
+      reduce({:range, from+1, to}, fun.(from, acc), fun)
+    else
+      acc
+    end
+  end
+\end{verbatim}
+
+\vspace{20pt}  \pause
+  
+  
+
+  
+\end{frame}
+
+\begin{frame}{Things we would like to do}
+
+  Can we, without traversing the full range:
+  \begin{itemize}
+  \item take the first five elements
+  \item find an element in the range
+  \item return the first element and the rest of the range
+  \end{itemize}
+
+  \vspace{20pt}\pause
+  {\em We need to control the reduction.}
+\end{frame}
+
+
+
+\begin{frame}[fragile]{continue}
+
+  
+\begin{verbatim}
+  def reduce({:range, from , to}, {:cont, acc}, fun) do
+    if from <= to do
+      reduce({:range, from+1, to}, fun.(from, acc), fun)
+    else
+      {:done, acc}
+    end
+  end
+\end{verbatim}
+
+  \pause
+  
+\begin{verbatim}
+  def sum(r) do
+    reduce(r, {:cont, 0}, fn(x,a) -> {:cont, x+a} end)
+  end
+\end{verbatim}
+
+  
+\end{frame}
+
+\begin{frame}[fragile]{stop in the midle}
+
+\begin{verbatim}
+    :
+  def reduce(_, {:halt, acc}, _fun) do
+    {:halted, acc}
+  end
+\end{verbatim}
+
+\pause
+\begin{verbatim}
+  def take(r, n) do
+    reduce(r, {:cont, {:sofar, 0, [] }},
+      fn(x,{:sofar, s, a}) ->
+        s = s+1
+        if s >= n do
+          {:halt, [x|a]}
+        else
+          {:cont, {:sofar, next, [x|a]}}
+        end
+      end)
+  end    
+\end{verbatim}
+  
+  
+\end{frame}
+
+\begin{frame}[fragile]{ head and tail }
+
+\begin{verbatim}
+    :
+  def reduce(range, {:suspend, acc}, fun) do
+    {:suspended, acc, fn(cmd) -> reduce(range, cmd, fun) end}
+  end
+\end{verbatim}
+  \pause
+
+
+\begin{verbatim}
+  def head(r) do
+    reduce(r, {:cont, nil},
+      fn (x, _) ->
+        {:suspend, x}
+      end)
+  end
+\end{verbatim}
+  
+\end{frame}
+
+\begin{frame}{Elixir libraries}
+
+  \begin{itemize}
+  \item {\tt List} : operatates on lists, returns a list or some value.  \pause
+  \item {\tt Enum} : takes an {\tt Enumerable} as argument, returns a list or value. \pause
+  \item {\tt Stream} : takes an {\tt Enumerable} as argument, returns an {\tt Enumerable} or value. 
+  \end{itemize}
+
+  \vspace{20pt}\pause {\em A datastructure is {\em Enumerable} if it
+    implements the {\em reduce protocol}. Lists and ranges are {\tt
+      Enumerable}.}
+  
+\end{frame}
+
+
+\begin{frame}{Higher order}
+
+Order of what?
+
+\pause\vspace{20pt}
+A first order function takes a value, a data structures, as argument and returns a value.
+
+\pause\vspace{20pt}
+A second order function takes a first order function as argument or returns a first order function.
+
+\pause\vspace{20pt}
+A third order function ....
+
+\pause\vspace{20pt}
+Higher order functions takes a higher order ...
+
+\pause\vspace{20pt}
+Are functions considered to be ``first-class citizen''?
+\end{frame}
+
+\begin{frame}[fragile]{not}
+    
+  \vspace{20pt}Not really - look at this.
+    
+\begin{verbatim}
+ f = fn(x) -> x + 1end
+ g = fn(y) -> y + 1 end
+\end{verbatim}
+\vspace{20pt}\pause
+\begin{verbatim}
+\end{verbatim}
+  f == g 
+\end{frame}
+
+
+\begin{frame}{Summary}
+
+\pause Higher order programming:
+
+\begin{itemize}
+\pause\item {closure}: a function and an environment
+\pause\item {generic algorithms}: separate the recursive pattern from the data it operates over
+\pause\item {continuations}: powerful technique to handle incomplete information
+\pause\item {range}: representation of a range of integers
+\pause\item {streams}: lazy evaluation of ranges resulting in 
+\end{itemize}
+
+
+\end{frame}
+
+
+\end{document}
+
+
+

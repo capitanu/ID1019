@@ -1,0 +1,117 @@
+\input{../include/preamble}
+
+
+\title[ID1019 Introduction]{Introduction}
+
+\author{Johan Montelius}
+\institute{KTH}
+\date{\semester}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{introduction}
+  Functional programming - what?
+\end{frame}
+
+\begin{frame}{variablem, literals and builtin operations}
+\begin{columns}
+ \begin{column}{0.4\linewidth}
+   \begin{itemize}
+     \pause \item {variables:} {\tt x}, {\tt y}, {\tt foo}, ..
+     \pause \item {integer:} {\tt 1}, {\tt 23}, ..
+     \pause \item {float:} {\tt 1.0}, {\tt 23.45}, ..
+     \pause \item {bool:} {\tt true}, {\tt false} 
+   \end{itemize}
+ \end{column}
+ \begin{column}{0.6\linewidth}
+  \begin{itemize}
+    \pause \item {binary operations:} {\tt +},{\tt -},{\tt *},{\tt /}, ..
+    \pause \item {arithmetic functions:} {\tt div/2}, {\tt rem/2}, {\tt *}, ..   
+    \pause \item {comparison:} {\tt ==}, {\tt !=}, ..
+    \pause \item {boolean operators:} {\tt and}, {\tt or}, ..
+  \end{itemize}
+ \end{column}
+\end{columns}
+
+\vspace{20pt}{\em There are more but this is fine for now.}
+
+\end{frame}
+
+
+\begin{frame}{functions}
+  \begin{itemize}
+   \pause \item {\tt fn x -> x + 2 end}
+   \pause \item {\tt (fn x -> x + 2 end).(5)}
+   \pause \item {\tt (7 + 5)}
+   \pause \item {\tt 12}
+  \end{itemize}
+
+
+\vspace{20pt}{\em Can we give names to functions?}  
+\end{frame}
+
+\begin{frame}[fragile]{Modules}
+
+  \begin{verbatim}
+    defmodule Test do
+
+    def to_celsius(fahren) do
+       (fahren - 32) / 1.8
+    end
+
+    end
+  \end{verbatim}
+
+\end{frame}
+
+\begin{frame}[fragile]{recursion}
+
+\begin{verbatim}
+  def fib(n) do 
+      :
+      :
+  end
+\end{verbatim}
+
+\end{frame}
+
+\begin{frame}[fragile]{atoms}
+
+\begin{verbatim}
+ def roman(number) do 
+   case number of
+     :i -> 1
+     :v -> 5
+     :x -> 10
+   end
+ end   
+\end{verbatim}
+\end{frame}
+
+
+\begin{frame}{tuples}
+
+ \begin{itemize}
+  \pause \item {tuples:} {\tt \{\}, \{:foo, :bar\}, \{:a, 42, true\}}
+ \end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{patterns}
+
+\begin{verbatim}
+   def name({:person, name, number} do name end
+
+   def number({:person, name, number} do number end
+\end{verbatim}
+
+\end{frame}
+
+
+
+\end{document}

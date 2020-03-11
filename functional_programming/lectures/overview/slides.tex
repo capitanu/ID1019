@@ -1,0 +1,189 @@
+\input{../include/preamble}
+
+\title[ID1019 Overview]{Overview}
+
+
+\author{Johan Montelius}
+\institute{KTH}
+\date{\semester}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+\begin{frame}{Introduction}
+  \begin{itemize}
+    \pause \item Learning outcomes
+    \pause \item Literature
+    \pause \item Lectures
+    \pause \item Seminars
+    \pause \item Exam
+    \pause \item More
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Learning outcomes}
+  The aim of the course:
+
+\pause
+\begin{itemize}
+\item Functional programming:
+\pause
+  \begin{itemize}
+   \item recursion, pattern matching, functions as first class objects, closures, higher order functions and immutable data structures
+\pause
+   \item implement selected algorithms in a functional programming language
+  \end{itemize}
+\pause
+\item Concurrent programming:
+  \begin{itemize}
+\pause
+    \item advantages and disadvantages
+\pause
+    \item message passing, actors model
+\pause
+    \item design, implement, test and debug 
+  \end{itemize}  
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{why functional programming}
+
+Why do we need a course in functional and concurrent programming?
+
+\begin{tikzpicture}[scale=1.0]
+\pause
+ \node (haskell) at (1,6) {\includegraphics[scale=0.4]{haskell.png}};
+\pause
+ \node (lisp) at (6,7) {\includegraphics[scale=0.3]{lisp.png}};
+\pause
+ \node (erlang) at (0,2) {\includegraphics[scale=0.6]{erlang.jpeg}};
+ \pause
+ \node (f) at (10,6) {\includegraphics[scale=0.4]{f.jpeg}};
+ \pause
+ \node (elixir) at (8,4) {\includegraphics[scale=0.4]{elixir.png}}; 
+\pause 
+ \node (scala) at (4,4) {\includegraphics[scale=0.1]{scala.png}};
+\pause
+ \node (python) at (4,2) {\includegraphics[scale=0.4]{python.png}};
+\pause
+\node (c11) at (10,2) {\includegraphics[scale=0.3]{c11.jpeg}};
+\pause
+ \node (rust) at (3,6) {\includegraphics[scale=0.3]{rust.png}};
+\end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}{why concurrency}
+
+Two reasons:
+
+\pause\vspace{20pt}\hspace{60pt}A tool to model interactive services.
+
+\pause\vspace{20pt}\hspace{60pt}Hardware can utilize concurrency to speed-up computations.
+
+\pause\vspace{40pt}
+{\em To build a good game engine, you need to master concurrency}
+
+\end{frame}
+
+
+\begin{frame}{Literature}
+
+  This course is not about a particular language but .... \pause
+
+  \vspace{20pt}\hspace{40pt} ... we need a language to experiment with.
+
+\pause
+\begin{columns}
+ \begin{column}{0.6\linewidth}
+   \begin{itemize}
+   \item Introducing Elixir - Getting Started in Functional Programming
+   \item Simon St. Laurent, J. Eisenberg
+   \item O'Reilly Media
+   \end{itemize}
+ \end{column}
+ \begin{column}{0.4\linewidth}
+    \includegraphics[scale=0.2]{lrg.jpg}    
+ \end{column}
+\end{columns}
+
+  \vspace{20pt}\hspace{40pt} {\em Best way to learn the principles of biking is riding a bike.}
+
+\end{frame}
+
+
+\begin{frame}{Lectures}
+
+   We will have 14 lectures that will cover the following aspects:
+
+
+  \begin{itemize}
+    \item Functional programming
+\pause
+    \item Programming techniques
+\pause
+    \item Complexity 
+\pause
+    \item Concurrency 
+\pause
+    \item Parallelism
+\pause
+    \item Servers
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Seminars}
+
+  To take part in the seminar sessions, you should:
+  \begin{itemize}
+  \item solve an assigment before the seminar
+  \end{itemize}
+
+  \pause \vspace{20pt}
+  The seminars are not compulsory but,\pause if you attend you should have prepared well. 
+
+  \pause \vspace{20pt}
+  Collaborate in the implementation.
+
+\end{frame}
+
+\begin{frame}{Seminars}
+  \begin{itemize}
+    \item Huffman coding: implementing a compression algorithm \pause
+    \item A meta-interpreter: Elixir interpreter in Elixir \pause
+    \item Dining philosophers: introduction to concurrency \pause
+    \item A Mandelbrot image: parallelism \pause
+    \item A small web server: easier than you think
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Exam}
+
+\pause A closed book exam -- {\bf where writing code by hand will be a large part.}
+
+\vspace{20pt}
+
+\pause Final grade is based on written exam. 
+
+\end{frame}
+
+\begin{frame}{and finally}
+
+  Two student representatives for course board. We will meet a couple
+  of times during the course so that you can give feedback.
+
+\pause\vspace{20pt}
+
+Don't use KTH Social for feedback or questions - use Canvas. 
+
+\end{frame}
+
+\end{document}
